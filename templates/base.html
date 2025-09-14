@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}TokoKopi.id{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Minimal CSS framework (Pico.css) -->
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="container-fluid header">
+      <nav class="container">
+        <ul>
+          <li><strong>☕ TokoKopi.id</strong></li>
+        </ul>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Produk</a></li>
+          <li><a href="#tentang">Tentang</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#kontak">Kontak</a></li>
+          <li><a href="{{ url_for('cart') }}" class="contrast">Keranjang ({{ cart_count if cart_count is defined else 0 }})</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="container-fluid footer">
+      <div class="container grid">
+        <div>
+          <strong>TokoKopi.id</strong>
+          <p>Biji kopi Nusantara, segar & berkualitas.</p>
+        </div>
+        <div id="kontak">
+          <strong>Kontak</strong>
+          <ul>
+            <li>WhatsApp: <a href="https://wa.me/6281234567890">6281234567890</a></li>
+            <li>Instagram: <a href="#">@tokokopi.id</a></li>
+            <li>Email: <a href="mailto:halo@tokokopi.id">halo@tokokopi.id</a></li>
+          </ul>
+        </div>
+        <div>
+          <strong>Alamat</strong>
+          <p>Jl. Contoh No. 123, Kota Anda, Indonesia</p>
+        </div>
+      </div>
+      <p class="container copyright">© {{ now_year }} TokoKopi.id</p>
+    </footer>
+  </body>
+</html>

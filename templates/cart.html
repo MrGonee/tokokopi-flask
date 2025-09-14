@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Keranjang — TokoKopi.id{% endblock %}
+{% block content %}
+<h2>Keranjang Belanja</h2>
+{% if not cart %}
+  <article class="contrast"><p>Keranjang masih kosong. <a href="{{ url_for('index') }}">Belanja produk</a>.</p></article>
+{% else %}
+<form method="post" action="{{ url_for('cart_update') }}">
+  <table role="grid">
+    <thead>
+      <tr><th>Produk</th><th>Berat</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for it in cart %}
+      <tr>
+        <td>
+          <strong>{{ it.name }}</strong><br>
+          <small>{{ it.roast }}</small>
+        </td>
+        <td>{{ it.weight }}g</td>
+        <td style="width: 120px;">
+          <input type="number" name="qty_{{ loop.index0 }}" value="{{ it.qty }}" min="0">
+        </td>
+        <td>{{ format_idr( (it.price if it.weight==250 else (it.price*1.9 if it.weight==500 else it.price*3.6))|round|int * it.qty ) }}</td>
+        <td>
+          <form method="post" action="{{ url_for('cart_remove') }}">
+            <input type="hidden" name="idx" value="{{ loop.index0 }}">
+            <button type="submit" class="secondary">Hapus</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="grid">
+    <button type="submit">Perbarui Keranjang</button>
+    <form method="post" action="{{ url_for('cart_clear') }}">
+      <button type="submit" class="secondary">Kosongkan Keranjang</button>
+    </form>
+  </div>
+</form>
+
+<article>
+  <header><strong>Total</strong></header>
+  <p class="total">{{ format_idr(total) }}</p>
+  <form method="post" action="{{ url_for('checkout') }}" class="grid">
+    <input type="text" name="buyer" placeholder="Nama penerima (opsional)">
+    <input type="text" name="notes" placeholder="Catatan (grind: V60/espresso/tubruk, alamat, dll.)">
+    <button type="submit">Checkout via WhatsApp</button>
+  </form>
+  <p><small>Dengan menekan checkout, Anda akan diarahkan ke WhatsApp dengan ringkasan pesanan.</small></p>
+</article>
+{% endif %}
+{% endblock %}

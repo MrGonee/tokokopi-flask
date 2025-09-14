@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}TokoKopi.id — Produk{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="grid">
+    <div>
+      <h1>Kopi Segar Dipanggang, <mark>Rasa Juara</mark>.</h1>
+      <p>Biji kopi pilihan dari Nusantara. Diroasting mingguan, dikirim cepat. Untuk espresso, V60, mokapot, atau kopi susu favorit Anda.</p>
+      <p>
+        <a role="button" href="#produk">Belanja Sekarang</a>
+        <a role="button" class="secondary" href="#tentang">Kenapa Kami?</a>
+      </p>
+      <div class="stats">
+        <small><strong>Fresh Roast</strong> · Roast mingguan</small>
+        <small><strong>Gratis Grinding</strong> · Sesuai metode</small>
+        <small><strong>COD/WA</strong> · Mudah & cepat</small>
+      </div>
+    </div>
+    <div>
+      <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1400&auto=format&fit=crop" alt="Kopi beans" class="rounded shadow">
+    </div>
+  </div>
+</section>
+
+<section id="produk">
+  <h2>Produk Kami</h2>
+  <form method="get" class="grid filters">
+    <input type="search" name="q" placeholder="Cari: arabica, robusta, notes… " value="{{ q }}">
+    <select name="origin">
+      {% for o in origins %}<option value="{{ o }}" {{ 'selected' if origin==o else '' }}>{{ o }}</option>{% endfor %}
+    </select>
+    <select name="roast">
+      {% for r in ['Semua','Light','Light-Medium','Medium','Medium-Dark','Dark'] %}
+        <option value="{{ r }}" {{ 'selected' if roast==r else '' }}>{{ r }}</option>
+      {% endfor %}
+    </select>
+    <select name="sort">
+      <option value="popular" {{ 'selected' if sort=='popular' else '' }}>Paling Populer</option>
+      <option value="price-asc" {{ 'selected' if sort=='price-asc' else '' }}>Harga Terendah</option>
+      <option value="price-desc" {{ 'selected' if sort=='price-desc' else '' }}>Harga Tertinggi</option>
+      <option value="name" {{ 'selected' if sort=='name' else '' }}>Nama A–Z</option>
+    </select>
+    <button type="submit">Terapkan</button>
+  </form>
+
+  <div class="grid products">
+    {% for p in products %}
+    <article class="card">
+      <img src="{{ p.image }}" alt="{{ p.name }}" class="rounded">
+      <div class="card-body">
+        <header>
+          <h3>{{ p.name }}</h3>
+          <small>{{ p.origin }} • {{ p.roast }}</small>
+        </header>
+        <p>{{ p.description }}</p>
+        <div class="tags">
+          {% for t in p.tasting %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+        <form method="post" action="{{ url_for('add_to_cart') }}" class="add-form">
+          <input type="hidden" name="product_id" value="{{ p.id }}">
+          <label>Berat
+            <select name="weight">
+              {% for w in p.weights %}<option value="{{ w }}">{{ w }}g</option>{% endfor %}
+            </select>
+          </label>
+          <label>Qty
+            <input type="number" name="qty" value="1" min="1">
+          </label>
+          <button type="submit">Tambah ke Keranjang</button>
+        </form>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="tentang">
+  <h2>Tentang Kami</h2>
+  <p>Kami roastery kecil yang fokus pada kualitas. Biji dipilih dari petani lokal, diproses dengan standar, dan dipanggang dalam batch kecil untuk menjaga kesegaran.</p>
+  <ul>
+    <li>Roast to order — kami giling sesuai metode (V60, espresso, moka, dll.)</li>
+    <li>Pengiriman cepat seluruh Indonesia</li>
+    <li>Diskon grosir untuk kafe & kantor</li>
+  </ul>
+</section>
+
+<section id="faq">
+  <h2>FAQ</h2>
+  <details><summary>Apakah bisa COD?</summary><p>Bisa untuk area tertentu. Hubungi kami via WhatsApp untuk cek ketersediaan.</p></details>
+  <details><summary>Apakah bisa digiling?</summary><p>Bisa gratis. Tulis metode seduh Anda saat checkout.</p></details>
+  <details><summary>Kapan kopi dipanggang?</summary><p>Kami roasting mingguan. Pesanan Anda dikirim maksimal H+2 setelah roasting.</p></details>
+  <details><summary>Apakah ada grosir?</summary><p>Ada diskon khusus untuk kafe/kantor. Hubungi kami untuk penawaran.</p></details>
+</section>
+{% endblock %}
